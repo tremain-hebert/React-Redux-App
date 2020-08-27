@@ -7,19 +7,25 @@ export const FETCHING_CHARACTER_ERROR = 'FETCHING_CHARACTER_ERROR';
 export const getCharacter = () => (dispatch) => {
     console.log("getCharacter action");
     dispatch({ type: FETCHING_CHARACTER_START });
+    function getRandom(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
+      }
     axios
-        .get("https://rickandmortyapi.com/api/character/")
+        .get(`https://rickandmortyapi.com/api/character/${getRandom(1, 672)}`)
         .then((res) => {
             dispatch({ 
                 type: FETCHING_CHARACTER_SUCCESS,
-                payload: res.data.results});
+                payload: res.data});
             console.log("API Res:", res);
         })
         .catch((err) => {
             dispatch({
                 type: FETCHING_CHARACTER_ERROR,
-                payload: `${err.response.message} code: ${err.response.code}`
+                payload: `${err}`
             });
             console.log(err);
         });
 };
+ 
